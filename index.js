@@ -1,34 +1,20 @@
-require('dotenv').config();
-const discord = require('selfbot-discord');
-const client = new discord.Client();
-const config = require("./config")
 const express = require('express');
-const console = require("./utils/logger")
+const { Client, RichPresence } = require('discord.js-selfbot-v13');
+
 const app = express();
+app.get('/', (req, res) => res.send('Roblox RPC is alive!'));
+app.listen(process.env.PORT || 3000);
 
-module.exports = client;
+const client = new Client({ checkUpdate: false });
 
-const token = process.env.token || config.token;
-
-if (!token) {
-  console.exit("No token provided");
-} else {
-  client.login(token);
-}
-
-config.mode ? require(`./presences/${config.mode}`) : console.exit('No presence selected!');
-console.logger.info(`
-
-                    ██████╗ ██╗███████╗ ██████╗ ██████╗ ██████╗ ██████╗       ██████╗ ██████╗  ██████╗
-                    ██╔══██╗██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔══██╗      ██╔══██╗██╔══██╗██╔════╝
-                    ██║  ██║██║███████╗██║     ██║   ██║██████╔╝██║  ██║█████╗██████╔╝██████╔╝██║     
-                    ██║  ██║██║╚════██║██║     ██║   ██║██╔══██╗██║  ██║╚════╝██╔══██╗██╔═══╝ ██║     
-                    ██████╔╝██║███████║╚██████╗╚██████╔╝██║  ██║██████╔╝      ██║  ██║██║     ╚██████╗
-                    ╚═════╝ ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝       ╚═╝  ╚═╝╚═╝      ╚═════╝                                                                                
-`
-)
-
-app.get('/', (_, res) => {
-  res.send('Presence is ready!');
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user.tag}`);
+  client.user.setStatus('dnd');
+  const rpc = new RichPresence(client)
+    .setApplicationId('363445589247131668')
+    .setType('PLAYING')
+    .setName('Roblox');
+  client.user.setActivity(rpc);
 });
-app.listen(3000)
+
+client.login(process.env.token);
