@@ -4,14 +4,14 @@ module.exports = {
     // discord bot token
     "token": "",
     // spotify/game/twitch
-    "mode": "", 
+    "mode": "game", 
     // dnd/online/idle
-    "status": "",
+    "status": "dnd",
 
     "game": {
-        "applicationID": "",
+        "applicationID": "363445589247131668",
 
-        "name": "", // title
+        "name": "Roblox", // title
         "details": "", // first row below title
         "state": "", // row below first row
 
